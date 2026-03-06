@@ -1,0 +1,17 @@
+# Azure app credentials — DO NOT COMMIT
+extension/src/config.js
+
+# Developer notes (contains private IDs)
+tmp/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node (if a build step is added later)
+node_modules/
+dist/
+
+*.zip

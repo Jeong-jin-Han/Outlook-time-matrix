@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Outlook Time Matrix - Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Microsoft OAuth Settings</h1>
+      <p>Set Azure App Registration values for this extension.</p>
+
+      <label>
+        Tenant ID
+        <input id="tenantId" placeholder="common or your tenant GUID" />
+      </label>
+
+      <label>
+        Client ID
+        <input id="clientId" placeholder="Application (client) ID" />
+      </label>
+
+      <label>
+        Object ID
+        <input id="objectId" placeholder="Object (principal) ID" />
+      </label>
+
+      <p id="redirectUri" class="mono"></p>
+      <p class="mono">Register the exact Redirect URI above in Azure App Registration > Authentication > Redirect URIs.</p>
+      <button id="saveBtn">Save</button>
+      <p id="status"></p>
+    </main>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

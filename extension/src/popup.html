@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Outlook Time Matrix</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="app" id="app">
+      <header class="toolbar">
+        <div class="btn-group fill">
+          <button id="signInBtn">LOGIN</button>
+          <select id="calendarSelect" title="Select calendar"></select>
+          <button id="loadBtn">Load</button>
+          <button id="refreshBtn">Refresh</button>
+          <button id="outlookBtn" class="icon-btn" data-tooltip="Outlook Calendar">&#128467;</button>
+          <button id="viewToggleBtn" class="icon-btn" data-tooltip="Grid / List view">&#8862;</button>
+          <button id="settingsBtn" class="icon-btn" data-tooltip="Settings">&#9881;</button>
+          <button id="helpBtn" class="icon-btn" data-tooltip="Help">?</button>
+        </div>
+      </header>
+
+      <p id="status" class="status"></p>
+
+      <div class="main-layout">
+
+        <!-- Common Region sidebar (left) -->
+        <aside class="common-region" id="commonRegion">
+          <button class="common-toggle" id="commonToggle">&#9664;</button>
+          <div class="common-body" id="commonBody">
+            <div class="common-section">
+              <h4 class="common-section-title">ToDo</h4>
+              <div class="bucket" id="Common-ToDo"></div>
+            </div>
+            <div class="common-section">
+              <h4 class="common-section-title">Finished</h4>
+              <div class="bucket" id="Common-Finished"></div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Time Matrix -->
+        <section class="matrix-wrap" id="matrixWrap">
+          <div class="axis top">
+            <span>Urgent</span>
+            <span>Not Urgent</span>
+          </div>
+          <div class="grid">
+            <div class="axis left">
+              <span>Important</span>
+              <span>Not Important</span>
+            </div>
+            <div class="quadrants" id="quadrants">
+              <div class="quadrant q1" data-zone="Q1">
+                <div class="quadrant-header">
+                  <h3>1</h3>
+                  <span class="q-label">Urgent &amp; Important</span>
+                </div>
+                <div class="bucket" id="Q1"></div>
+              </div>
+              <div class="quadrant q2" data-zone="Q2">
+                <div class="quadrant-header">
+                  <h3>2</h3>
+                  <span class="q-label">Not Urgent &amp; Important</span>
+                </div>
+                <div class="bucket" id="Q2"></div>
+              </div>
+              <div class="quadrant q3" data-zone="Q3">
+                <div class="quadrant-header">
+                  <h3>3</h3>
+                  <span class="q-label">Urgent &amp; Not Important</span>
+                </div>
+                <div class="bucket" id="Q3"></div>
+              </div>
+              <div class="quadrant q4" data-zone="Q4">
+                <div class="quadrant-header">
+                  <h3>4</h3>
+                  <span class="q-label">Not Urgent &amp; Not Important</span>
+                </div>
+                <div class="bucket" id="Q4"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!--
+        Ad banner (~1 cm = 50px).
+        AdSense cannot run on chrome-extension:// URLs.
+        Host an ad page on your own verified domain, then use:
+          <iframe src="https://yourdomain.com/ad-banner.html" scrolling="no" frameborder="0"></iframe>
+        Also add your domain to host_permissions in manifest.json.
+      -->
+      <div class="ad-banner" id="adBanner">
+        <!-- <iframe src="https://yourdomain.com/ad-banner.html" scrolling="no" frameborder="0"></iframe> -->
+      </div>
+    </main>
+
+    <!-- Settings overlay -->
+    <div class="settings-overlay hidden" id="settingsOverlay">
+      <div class="settings-modal">
+        <button class="help-close" id="settingsClose">&#10005;</button>
+        <h2 class="help-title">Finished Category</h2>
+        <p class="settings-desc">Select which category color marks an event as finished in Outlook.</p>
+        <div id="categoryList" class="category-list"></div>
+        <button id="settingsSaveBtn" class="settings-save-btn">Save</button>
+      </div>
+    </div>
+
+    <!-- Help overlay -->
+    <div class="help-overlay hidden" id="helpOverlay">
+      <div class="help-modal">
+        <button class="help-close" id="helpClose">&#10005;</button>
+        <h2 class="help-title">How to use</h2>
+        <table class="help-table">
+          <tr>
+            <td><strong>Load</strong></td>
+            <td>Restore saved placements. Past events → Finished. New events → ToDo.</td>
+          </tr>
+          <tr>
+            <td><strong>Refresh</strong></td>
+            <td>Reset ALL placements to ToDo (asks for confirmation first).</td>
+          </tr>
+          <tr>
+            <td><strong>&#128467;</strong></td>
+            <td>Open Outlook Calendar in the browser tab.</td>
+          </tr>
+          <tr>
+            <td><strong>⊞ / ≡</strong></td>
+            <td>Switch between 2×2 grid view and 4×1 list view.</td>
+          </tr>
+          <tr>
+            <td><strong>◀ / ▶</strong></td>
+            <td>Expand or collapse the ToDo / Finished sidebar.</td>
+          </tr>
+          <tr>
+            <td><strong>Drag &amp; drop</strong></td>
+            <td>Move tasks between any quadrant or the Common sidebar.</td>
+          </tr>
+          <tr>
+            <td><strong>&#9745; Checkbox</strong></td>
+            <td>Instantly mark a task as Finished (uncheck to move back to ToDo).</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <template id="cardTemplate">
+      <article class="task" draggable="true">
+        <label class="task-check-label" title="Mark as finished" draggable="false">
+          <input type="checkbox" class="done-check" draggable="false" />
+        </label>
+        <div class="task-content">
+          <strong class="subject"></strong>
+          <small class="meta"></small>
+        </div>
+        <button class="task-open-btn" title="Outlook에서 열기" draggable="false">&#8599;</button>
+      </article>
+    </template>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

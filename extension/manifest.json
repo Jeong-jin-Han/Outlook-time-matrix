@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Outlook Time Matrix",
+  "description": "Fetch Outlook calendar tasks and map them into a drag-and-drop Time Matrix.",
+  "version": "0.1.0",
+  "permissions": [
+    "storage",
+    "identity",
+    "sidePanel",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://graph.microsoft.com/*",
+    "https://login.microsoftonline.com/*",
+    "https://outlook.live.com/*",
+    "https://outlook.office.com/*",
+    "https://outlook.office365.com/*"
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Outlook Time Matrix",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "side_panel": {
+    "default_path": "src/popup.html"
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "options_page": "src/options.html"
+}
