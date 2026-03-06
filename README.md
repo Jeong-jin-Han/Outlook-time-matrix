@@ -22,12 +22,12 @@ Most people live in their calendar — but a calendar alone doesn't tell you wha
 ## Screenshots
 
 <p align="center">
-  <img src="tmp/ex/resized/ex1.png" width="48%" />
-  <img src="tmp/ex/resized/ex2.png" width="48%" />
+  <img src="img/ex1.png" width="48%" />
+  <img src="img/ex2.png" width="48%" />
 </p>
 <p align="center">
-  <img src="tmp/ex/resized/ex4.png" width="48%" />
-  <img src="tmp/ex/resized/ex5.png" width="48%" />
+  <img src="img/ex4.png" width="48%" />
+  <img src="img/ex5.png" width="48%" />
 </p>
 
 ---
