@@ -19,6 +19,14 @@ Most people live in their calendar — but a calendar alone doesn't tell you wha
 
 ---
 
+## Demo
+
+<p align="center">
+  <img src="img/demo_reddit.gif" width="90%" alt="Outlook Time Matrix demo" />
+</p>
+
+---
+
 ## Screenshots
 
 <p align="center">
